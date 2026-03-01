@@ -8,6 +8,7 @@ import {
   inject
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
@@ -22,10 +23,14 @@ export class App implements AfterViewInit, OnDestroy {
   @ViewChild('showcaseCanvas') private readonly canvasRef?: ElementRef<HTMLCanvasElement>;
 
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly sanitizer = inject(DomSanitizer);
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
   private animationFrameId?: number;
   private readonly resizeHandler = () => this.startCanvasAnimation();
+  readonly videoUrl: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+    'https://www.youtube.com/embed/rz7wiAGsqBc'
+  );
 
   readonly navItems = [
     { label: 'Home', href: '#home' },
